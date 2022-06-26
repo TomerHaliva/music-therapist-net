@@ -3,12 +3,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
 
-import {
-  languagesAll,
-  countries,
-  getEmojiFlag,
-  getUnicode,
-} from "countries-list";
+import { languagesAll, countries } from "countries-list";
 
 import { findFlagUrlByIso2Code } from "country-flags-svg";
 import Card from "../../shared/components/UIElements/Card";
@@ -87,12 +82,19 @@ const AddLanguagesItem = (props) => {
         onCancel={closeAddHandler}
         footer={
           <React.Fragment>
-            <button onClick={closeAddHandler}>cancel</button>
-            <button type="submit" onClick={(e) => addLanguageHandler(e)}>
-              submit
+            <button id="cancel" onClick={closeAddHandler}>
+              CANCEL
+            </button>
+            <button
+              id="submit"
+              type="submit"
+              onClick={(e) => addLanguageHandler(e)}
+            >
+              SUBMIT
             </button>
           </React.Fragment>
         }
+        footerClass="add-language"
       >
         <div className="addLanguage-container">
           <h2>Add a language</h2>

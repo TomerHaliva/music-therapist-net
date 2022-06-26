@@ -3,6 +3,7 @@ import React from "react";
 import GenresItem from "./GenresItem";
 import Card from "../../shared/components/UIElements/Card";
 import "./GenresList.css";
+import AddGenreItem from "./AddGenreItem";
 
 const GenresList = (props) => {
   if (props.items.length === 0) {
@@ -26,6 +27,7 @@ const GenresList = (props) => {
           details={genre.details}
         />
       ))}
+      <AddGenreItem id="ADD" name="Add Genre" onClose={props.onAdded} />
     </ul>
   );
 };

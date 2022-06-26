@@ -14,7 +14,8 @@ const GenresItem = (props) => {
       <Card className="genre-item__content">
         <Link to={`/home/${language}/${props.id}`}>
           <div className="genre-item__image">
-            <Avatar image={props.image} alt={props.name} />
+            {props.name}
+            {/* <Avatar image={props.image} alt={props.name} /> */}
           </div>
           <br></br>
           <div className="genre-item__info">

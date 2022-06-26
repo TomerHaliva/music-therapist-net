@@ -1,12 +1,12 @@
 const express = require("express");
 
-const languageControllers = require("../controllers/language-controller");
+const genresControllers = require("../controllers/genre-controller");
 
 const router = express.Router();
 
-router.get("/", languageControllers.getAllLanguages);
+router.get("/", genresControllers.getAllGenres);
 
-router.post("/", languageControllers.addLanguage);
+router.post("/", genresControllers.addGenre);
 
 // router.patch("/:uid", usersControllers.updateUser);
 

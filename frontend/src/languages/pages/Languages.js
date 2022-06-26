@@ -4,23 +4,19 @@ import axios from "axios";
 import LanguagesList from "../components/LanguagesList";
 
 const Languages = () => {
-  const [lang,setLang] = useState([])
+  const [language, setLanguage] = useState([]);
 
   useEffect(() => {
-    getLang()
+    getLanguage();
   }, []);
-  
-  const getLang = async () => {
+
+  const getLanguage = async () => {
     await axios.get("http://localhost:5000/api/languages").then((res) => {
-      console.log(res.data.languages);
-      setLang(res.data.languages);
+      // console.log(res.data.languages);
+      setLanguage(res.data.languages);
     });
-  }
-  return (
-    <React.Fragment>
-      <LanguagesList items={lang} onAdded={getLang}/>
-    </React.Fragment>
-  );
+  };
+  return <LanguagesList items={language} onAdded={getLanguage} />;
 };
 
 export default Languages;

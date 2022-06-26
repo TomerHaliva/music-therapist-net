@@ -1,0 +1,99 @@
+.view-screen__container {
+  background-color: rgb(255 255 255 / 93%);
+  
+  margin-top: -1rem;
+  display: flex;
+  flex-direction: row;
+  /* overflow: scroll; */
+  direction: rtl;
+}
+
+.view-screen__primary {
+  width: 70%;
+  margin: 1rem 4rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-screen__player-container {
+  position: relative;
+  padding-bottom: 45%;
+  height: 0;
+}
+
+.view-screen__player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.view-screen__info {
+  border-bottom: 2px solid #d9d9d9;
+}
+
+.view-screen__comments-container {
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+}
+
+.view-screen__comment {
+  display: grid;
+  grid-template-columns: auto 96%;
+}
+
+.view-screen__comment textarea {
+  width: 100%;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  font-size: 15pt;
+  border-bottom: 2px solid;
+  align-items: center;
+  overflow: visible;
+  
+}
+:focus {
+  outline: none;
+}
+
+.view-screen__comment-buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+}
+
+.view-screen__comment-buttons span {
+  background-color: none;
+  border-bottom: 1.5px solid;
+  font-size: 15pt;
+}
+
+.view-screen__comment-buttons span:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.view-screen__secondary {
+  width: 25%;
+  margin: 1rem;
+}
+
+.view-screen__avatar{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+}
+
+.view-screen__comment-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.view-screen__comments{
+  display: flex;
+  flex-direction: column;
+}

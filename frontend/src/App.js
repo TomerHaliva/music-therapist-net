@@ -6,6 +6,8 @@ import {
   Switch,
 } from "react-router-dom";
 
+import { auth } from "../src/Firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 import Login from "./user/pages/Login";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import Languages from "./languages/pages/Languages";
@@ -26,6 +28,10 @@ const App = () => {
     setIsLoggedIn(false);
   }, []);
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) login();
+    else logout();
+  });
 
   let routes;
 

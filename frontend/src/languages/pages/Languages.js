@@ -1,36 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import LanguagesList from "../components/LanguagesList";
 
 const Languages = () => {
-  const USERS = [
-    {
-      id: "heb",
-      name: "Hebrew",
-      image: require("../../shared/images/israel.png"),
-      country: "Israel",
-    },
-    {
-      id: "engUSA",
-      name: "English",
-      image: require("../../shared/images/united-states.png"),
-      country: "United State",
-    },
-    {
-      id: "fra",
-      name: "French",
-      image: require("../../shared/images/france.png"),
-      country: "France",
-    },
-    {
-      id: "rus",
-      name: "Russian",
-      image: require("../../shared/images/russia.png"),
-      country: "Russia",
-    },
-  ];
+  const [lang,setLang] = useState([])
 
-  return <LanguagesList items={USERS} />;
+  useEffect(() => {
+    getLang()
+  }, []);
+  
+  const getLang = async () => {
+    await axios.get("http://localhost:5000/api/languages").then((res) => {
+      console.log(res.data.languages);
+      setLang(res.data.languages);
+    });
+  }
+  return (
+    <React.Fragment>
+      <LanguagesList items={lang} onAdded={getLang}/>
+    </React.Fragment>
+  );
 };
 
 export default Languages;

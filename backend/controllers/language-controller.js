@@ -26,4 +26,18 @@ const addLanguage = async (req, res, next) => {
   res.status(201).json({ language: createdLanguage }); // Code 201 means something new created
 };
 
+const getAllLanguages = async (req, res, next) => {
+  let languages;  
+  try {
+    languages = await Language.find({});
+  } catch (err) {
+    const error = new HttpError("Could not find any languages", 500);
+    return next(error);
+  }
+
+  res.json({ languages: languages.map((language) => language.toObject()) });
+
+}; 
+
 exports.addLanguage = addLanguage;
+exports.getAllLanguages = getAllLanguages;

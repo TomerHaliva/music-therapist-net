@@ -42,6 +42,11 @@
   font-size: 50pt;
 }
 
+.language-item__add-language-form label {
+  display: block;
+  margin: 0.5rem 0.25rem;
+}
+
 .addLanguage-container {
   height: 20rem;
   width: 100%;

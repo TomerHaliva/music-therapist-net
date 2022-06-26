@@ -6,7 +6,7 @@ const router = express.Router();
 
 // router.get("/", usersControllers.getAllUsers);
 
-// router.get("/:uid", usersControllers.getUserByUid);
+router.get("/", languageControllers.getAllLanguages);
 
 router.post("/", languageControllers.addLanguage);
 

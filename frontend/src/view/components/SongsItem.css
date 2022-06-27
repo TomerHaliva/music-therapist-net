@@ -1,0 +1,38 @@
+.song-item {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.song-item:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.song-item ul {
+  list-style-type: none;
+  width: 100%;
+}
+
+.song-item__content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  height: 12rem;
+}
+
+.song-item__info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.song-item-video {
+  /* pointer-events: auto; */
+}
+.iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.video {
+  height: 100%;
+}

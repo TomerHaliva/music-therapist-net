@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get("/", genresControllers.getAllGenres);
 
+router.get("/:genre", genresControllers.getGenreById);
+
 router.post("/", genresControllers.addGenre);
 
 // router.patch("/:uid", usersControllers.updateUser);

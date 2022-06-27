@@ -13,6 +13,7 @@ const GenresItem = (props) => {
     <li className="genre-item">
       <Card className="genre-item__content">
         <Link to={`/home/${language}/${props.id}`}>
+          {console.log()}
           <div className="genre-item__image">
             {props.name}
             {/* <Avatar image={props.image} alt={props.name} /> */}

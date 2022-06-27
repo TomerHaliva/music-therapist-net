@@ -4,18 +4,13 @@ import GenresItem from "./GenresItem";
 import Card from "../../shared/components/UIElements/Card";
 import "./GenresList.css";
 import AddGenreItem from "./AddGenreItem";
+import Loading from "../../shared/components/UIElements/Loading";
 
 const GenresList = (props) => {
   if (props.items.length === 0) {
-    return (
-      <div className="center">
-        <Card>
-          <h2>No genre found.</h2>
-        </Card>
-      </div>
-    );
+    return <Loading />;
   }
-
+ 
   return (
     <ul className="genre-list">
       {props.items.map((genre) => (

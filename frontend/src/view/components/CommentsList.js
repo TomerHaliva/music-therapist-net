@@ -9,7 +9,7 @@ const CommentsList = (props) => {
     return (
       <div className="center">
         <Card>
-          <h2>No comments yet.</h2>
+          <h2>אין תגובות</h2>
         </Card>
       </div>
     );

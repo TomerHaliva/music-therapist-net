@@ -1,6 +1,6 @@
 .view-screen__container {
   background-color: rgb(255 255 255 / 93%);
-  
+
   margin-top: -1rem;
   display: flex;
   flex-direction: row;
@@ -10,7 +10,7 @@
 
 .view-screen__primary {
   width: 70%;
-  margin: 1rem 4rem 1rem 1rem;
+  margin: 1rem 4rem 1rem 0;
   display: flex;
   flex-direction: column;
 }
@@ -53,7 +53,6 @@
   border-bottom: 2px solid;
   align-items: center;
   overflow: visible;
-  
 }
 :focus {
   outline: none;
@@ -78,22 +77,25 @@
 
 .view-screen__secondary {
   width: 25%;
-  margin: 1rem;
+  margin: 1rem 1rem 0 0;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
 }
 
-.view-screen__avatar{
-    width: 3rem;
-    height: 3rem;
-    border-radius: 3rem;
+.view-screen__avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 3rem;
 }
 
-.view-screen__comment-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.view-screen__comment-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.view-screen__comments{
+.view-screen__comments {
   display: flex;
   flex-direction: column;
 }

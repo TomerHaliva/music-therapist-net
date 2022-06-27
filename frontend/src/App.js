@@ -16,6 +16,7 @@ import Register from "./user/pages/Register";
 import Genres from "./genres/pages/Genres";
 import ViewScreen from "./view/pages/ViewScreen";
 import { AuthContext } from "./shared/context/auth-context";
+import Loading from "./shared/components/UIElements/Loading";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +48,8 @@ const App = () => {
         <Route path="/home/:language/:genre" exact>
           <ViewScreen />
         </Route>
-        <Redirect to="/home" />
+        {/* <Redirect to="/home" /> */}
+        <Loading show={true} />
       </Switch>
     );
   } else {
@@ -62,7 +64,8 @@ const App = () => {
         <Route path="/register">
           <Register />
         </Route>
-        <Redirect to="/" />
+        {/* <Redirect to="/" /> */}
+        <Loading show={true} />
       </Switch>
     );
   }

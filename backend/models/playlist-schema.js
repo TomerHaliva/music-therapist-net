@@ -3,13 +3,12 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const Schema = mongoose.Schema;
 
-const genreSchema = new Schema({
+const playlistSchema = new Schema({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true, unique: true },
-  details: { type: String, required: true },
-  type: { type: String, required: true },
+  records: { type: Array, required: true },
 });
 
-genreSchema.plugin(uniqueValidator);
+playlistSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model("Genre", genreSchema);
+module.exports = mongoose.model("Playlist", playlistSchema);

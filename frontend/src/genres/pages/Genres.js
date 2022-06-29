@@ -15,7 +15,6 @@ const Genres = () => {
 
   const getGenres = async () => {
     await axios.get("http://localhost:5000/api/genres").then((res) => {
-      console.log(res.data);
       res.data.genres.forEach((genre) => {
         if (genre.type === "decade")
           genre.details = language + " " + genre.details;

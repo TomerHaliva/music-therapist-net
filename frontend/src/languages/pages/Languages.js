@@ -12,7 +12,7 @@ const Languages = () => {
 
   const getLanguage = async () => {
     await axios.get("http://localhost:5000/api/languages").then((res) => {
-      // console.log(res.data.languages);
+      console.log(res.data.languages);
       setLanguage(res.data.languages);
     });
   };

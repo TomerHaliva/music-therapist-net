@@ -1,14 +1,14 @@
 const express = require("express");
 
-const commentController = require("../controllers/comment-controller");
+const recorController = require("../controllers/record-controller");
 
 const router = express.Router();
 
 // router.get("/", genresControllers.getAllGenres);
 
-// router.get("/:playlistId", playlistController.getPlaylistById);
+router.get("/:recordId", recorController.getRecord);
 
-router.post("/", commentController.addComment);
+router.post("/", recorController.addRecord);
 
 // router.patch("/:uid", usersControllers.updateUser);
 

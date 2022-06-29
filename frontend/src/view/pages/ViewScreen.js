@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import YouTube from "react-youtube";
 import axios from "axios";
@@ -6,38 +6,31 @@ import axios from "axios";
 import AddComment from "../components/AddComment";
 import CommentsList from "../components/CommentsList";
 import Loading from "../../shared/components/UIElements/Loading";
+import SongsList from "../components/SongsList";
+import { PlayerContext } from "../../shared/context/player-context";
+import { AuthContext } from "../../shared/context/auth-context";
 
 import "./ViewScreen.css";
-import SongsList from "../components/SongsList";
-
-const COMMENTS = [
-  {
-    id: "1",
-    userName: "Tomer Haliva",
-    text: "This is a comment",
-    avatar: "TH",
-    likes: 8,
-    unlikes: 0,
-  },
-  {
-    id: "2",
-    userName: "Gal Itach",
-    text: "This is a comment",
-    avatar: "GI",
-    likes: 32,
-    unlikes: 9,
-  },
-];
 
 const ViewScreen = () => {
   const language = useParams().language;
   const genre = useParams().genre;
 
+  const playerContext = useContext(PlayerContext);
+
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
-    loadPlaylist();
+    loadPlaylist().then(setLoaded(true));
   }, []);
 
-  const [playlist, setPlaylist] = useState();
+  const [playlist, setPlaylist] = useState([]);
+  const [currentPlay, setCurrentPlay] = useState({});
+
+  const switchRecord = useCallback((record) => {
+    playerContext.currentPlay = record;
+    setCurrentPlay(record);
+  }, []);
 
   const loadPlaylist = async () => {
     await axios
@@ -48,8 +41,9 @@ const ViewScreen = () => {
           await axios
             .get(`http://localhost:5000/api/playlists/${genre}`) // GET playlist which is genre
             .then((res) => {
-              // console.log(res);
+              console.log(res);
               setPlaylist(res.data.playlist.records);
+              switchRecord(res.data.playlist.records[0]);
             })
             .catch((err) => {
               console.log(err.response.data.message);
@@ -74,39 +68,52 @@ const ViewScreen = () => {
       .catch((err) => console.log(err));
   };
 
-  // if (playlist.records.length === 0) return <Loading show={true} />;
   if (!playlist) return <Loading show={true} />;
   if (playlist.length === 0) return <div>No songs</div>;
-  console.log(playlist);
 
   return (
-    <div className="view-screen__container">
-      <div className="view-screen__primary">
-        <div className="view-screen__player-container">
-          <YouTube
-            iframeClassName="view-screen__player"
-            videoId="GMkmQlfOJDk"
-          ></YouTube>
+    <PlayerContext.Provider
+      value={{ currentPlay: currentPlay, switchRecord: switchRecord }}
+    >
+      <div className="view-screen__container">
+        <div className="view-screen__primary">
+          <div className="view-screen__player-container">
+            <YouTube
+              iframeClassName="view-screen__player"
+              videoId={playerContext.currentPlay.videoId}
+            ></YouTube>
+          </div>
+          <div className="view-screen__info">
+            <h1>{playerContext.currentPlay.title}</h1>
+            <h2>{playerContext.currentPlay.artistName}</h2>
+          </div>
+          <div className="view-screen__comments-container">
+            <h4>{`${
+              playerContext.currentPlay.comments
+                ? playerContext.currentPlay.comments.length
+                : 0
+            } תגובות`}</h4>
+            {Object.keys(playerContext.currentPlay).length > 0 ? (
+              <AddComment
+                record={playerContext.currentPlay}
+                onAdded={(comment) => {
+                  console.log(comment);
+                  playerContext.currentPlay.comments = comment;
+                  setCurrentPlay({ ...currentPlay, comments: comment });
+                }}
+              ></AddComment>
+            ) : null}
+          </div>
+          <CommentsList
+            items={playerContext.currentPlay.comments}
+          ></CommentsList>
         </div>
-        <div className="view-screen__info">
-          <h1>{playlist[0].title}</h1>
-          <h2>{playlist[0].artistName}</h2>
-        </div>
-        <div className="view-screen__comments-container">
-          <h4>{`${playlist[0].comments.length} תגובות`}</h4>
-          <AddComment
-            avatar={"TH"}
-            comments={playlist[0].comments}
-          ></AddComment>
-        </div>
-        {/* <div className="view-screen__comments"></div> */}
-        <CommentsList items={playlist[0].comments}></CommentsList>
-      </div>
 
-      <div className="view-screen__secondary">
-        <SongsList items={playlist} />
+        <div className="view-screen__secondary">
+          <SongsList items={playlist} />
+        </div>
       </div>
-    </div>
+    </PlayerContext.Provider>
   );
 };
 

@@ -1,93 +1,88 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { auth } from "../../Firebase-config";
+
+import { AuthContext } from "../../shared/context/auth-context";
+import { PlayerContext } from "../../shared/context/player-context";
 
 import "./AddComment.css";
-import CommentsList from "./CommentsList";
-
-const addCommentReducer = (state, action) => {
-  switch (action.type) {
-    case "COMMENT_INPUT":
-      console.log(action.commentValue);
-      if (action.commentValue.length > 0)
-        return {
-          ...state,
-          commentValue: action.commentValue,
-          showCommentBtns: true,
-        };
-      else
-        return {
-          ...state,
-          commentValue: action.commentValue,
-          showCommentBtns: false,
-        };
-
-    case "CANCEL":
-      return { ...state, commentValue: "", showCommentBtns: false };
-
-    case "ADD_COMMENT":
-      state.comments.push({
-        id: "3",
-        userName: "Roni Haliva",
-        text: "This is a comment",
-        avatar: "RH",
-      });
-      return {
-        ...state,
-        commentValue: "",
-        showCommentBtns: false,
-      };
-
-    default:
-      return state;
-  }
-};
 
 const AddComment = (props) => {
-  const [commentState, dispatchAddComment] = useReducer(addCommentReducer, {
-    commentValue: "",
-    showCommentBtns: false,
-    avater: props.avatar,
-    comments: props.comments,
-  });
+  const authContext = useContext(AuthContext);
+  const playerContext = useContext(PlayerContext);
+
+  const [record, setRecord] = useState();
+  const [currentUser, setCurrentUser] = useState();
+  const [commentValue, setCommentValue] = useState("");
+  const [showCommentBtns, setShowCommentBtns] = useState(false);
+
+  useEffect(() => {
+    setCurrentUser(authContext.currentUser);
+    setRecord(props.record);
+  }, [props]);
 
   const commentChangeHandler = (event) => {
-    dispatchAddComment({
-      type: "COMMENT_INPUT",
-      commentValue: event.target.value,
-    });
+    setCommentValue(event.target.value);
+    event.target.value.length > 0
+      ? setShowCommentBtns(true)
+      : setShowCommentBtns(false);
   };
 
   const cancelCommentHandler = () => {
-    dispatchAddComment({ type: "CANCEL" });
+    setCommentValue("");
+    setShowCommentBtns(false);
   };
 
-  const addCommentHandler = (event) => {
-    dispatchAddComment({
-      type: "ADD_COMMENT",
-      commentValue: event.target.value,
-    });
-    console.log(commentState.comments);
+  const addCommentHandler = async (obj) => {
+    const newComment = {
+      text: commentValue,
+      avatar: currentUser.avatar,
+      uid: currentUser.uuid,
+      record: record.title,
+    };
+
+    await axios
+      .post("http://localhost:5000/api/comments", newComment)
+      .then((res) => {
+        setCommentValue("");
+        setShowCommentBtns(false);
+        obj.switchRecord({ ...obj.currentPlay, comments: res.data.comment });
+      });
   };
 
   return (
-    <div className="add-comment__container">
-      <button className="add-comment__avatar">{props.avatar}</button>
-      <div className="add-comment__info">
-        <textarea
-          placeholder="הוספת תגובה..."
-          onChange={(event) => {
-            commentChangeHandler(event);
-          }}
-          value={commentState.commentValue}
-        ></textarea>
-        {commentState.showCommentBtns && (
-          <div className="add-comment__buttons">
-            <span onClick={(event) => addCommentHandler(event)}>תגובה</span>
-            <span onClick={(event) => cancelCommentHandler(event)}>ביטול</span>
+    <PlayerContext.Consumer>
+      {({ currentPlay, switchRecord }) => {
+        return (
+          <div className="add-comment__container">
+            <button className="add-comment__avatar">
+              {currentUser ? currentUser.avatar : ""}
+            </button>
+            <div className="add-comment__info">
+              <textarea
+                placeholder="הוספת תגובה..."
+                onChange={(event) => {
+                  commentChangeHandler(event);
+                }}
+                value={commentValue}
+              ></textarea>
+              {showCommentBtns && (
+                <div className="add-comment__buttons">
+                  <span
+                    onClick={() =>
+                      addCommentHandler({ currentPlay, switchRecord })
+                    }
+                  >
+                    תגובה
+                  </span>
+                  <span onClick={() => cancelCommentHandler()}>ביטול</span>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-      {/* <CommentsList items={commentState.comments}></CommentsList> */}
-    </div>
+        );
+      }}
+    </PlayerContext.Consumer>
   );
 };
 

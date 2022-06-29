@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,9 +17,15 @@ import Genres from "./genres/pages/Genres";
 import ViewScreen from "./view/pages/ViewScreen";
 import { AuthContext } from "./shared/context/auth-context";
 import Loading from "./shared/components/UIElements/Loading";
+import axios from "axios";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    auth.currentUser && getUserDetails();
+  }, [auth.currentUser]);
 
   const login = useCallback(() => {
     setIsLoggedIn(true);
@@ -30,9 +36,22 @@ const App = () => {
   }, []);
 
   onAuthStateChanged(auth, (user) => {
-    if (user) login();
-    else logout();
+    if (user) {
+      login();
+    } else {
+      logout();
+    }
   });
+
+  const getUserDetails = async () => {
+    const userCardentials = auth.currentUser;
+    if (userCardentials)
+      await axios
+        .get(`http://localhost:5000/api/users/${userCardentials.uid}`)
+        .then((res) => {
+          setCurrentUser(res.data.user);
+        });
+  };
 
   let routes;
 
@@ -48,7 +67,7 @@ const App = () => {
         <Route path="/home/:language/:genre" exact>
           <ViewScreen />
         </Route>
-        {/* <Redirect to="/home" /> */}
+        <Redirect to="/home" />
         <Loading show={true} />
       </Switch>
     );
@@ -65,7 +84,8 @@ const App = () => {
           <Register />
         </Route>
         {/* <Redirect to="/" /> */}
-        <Loading show={true} />
+        {/* <Loading show={true} /> */}
+        <Redirect to="/" />
       </Switch>
     );
   }
@@ -74,6 +94,7 @@ const App = () => {
     <AuthContext.Provider
       value={{
         isLoggedIn: isLoggedIn,
+        currentUser: currentUser,
         login: login,
         logout: logout,
       }}

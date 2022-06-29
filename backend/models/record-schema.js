@@ -6,9 +6,9 @@ const Schema = mongoose.Schema;
 const recordSchema = new Schema({
   // id: { type: String, required: true, unique: true },
   title: { type: String, required: true, unique: true },
-  artistName: { type: String, required: true, unique: true },
+  artistName: { type: String, required: true },
   videoId: { type: String, required: true, unique: true },
-  comments: { type: Array, required: true },
+  comments: [{type: Schema.Types.ObjectId, ref:'Comment'}]
 });
 
 recordSchema.plugin(uniqueValidator);

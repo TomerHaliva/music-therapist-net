@@ -1,41 +1,47 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext } from "react";
+import YouTube from "react-youtube";
 
 import Card from "../../shared/components/UIElements/Card";
-import YouTube from "react-youtube";
+import { PlayerContext } from "../../shared/context/player-context";
 
 import "./SongsItem.css";
 
 const SongsItem = (props) => {
+  const switchRecordHandler = async (obj) => {
+    await axios
+      .get(`http://localhost:5000/api/records/${props.id}`)
+      .then((res) => {
+        // console.log(res.data);
+        obj.switchRecord(res.data.record);
+      });
+  };
   return (
-    <li className="song-item" onClick={(e) => e.preventDefault()}>
-      <Card className="song-item__content">
-        <div
-          className="song-item-video"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("clikced");
-          }}
-        >
-          <YouTube
-            videoId={props.videoId}
-            iframeClassName="iframe"
-            className="video"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log("clikced");
-            }}
-            // opts={{ playerVars: { enablejsapi: 1 } }}
-            // onStateChange={(e) => {
-            //   e.target.stopVideo();
-            // }}
-          />
-        </div>
-        <div className="song-item__info">
-          <h4>{props.title}</h4>
-          <h5>{props.artistName}</h5>
-        </div>
-      </Card>
-    </li>
+    <PlayerContext.Consumer>
+      {({ currentPlay, switchRecord }) => {
+        return (
+          <li
+            className="song-item"
+            onClick={() => switchRecordHandler({ currentPlay, switchRecord })}
+          >
+            <Card className="song-item__content">
+              <div className="song-item-video">
+                <YouTube
+                  videoId={props.videoId}
+                  iframeClassName="iframe"
+                  className="video"
+                  opts={{ playerVars: { modestbranding: 1, controls: 0 } }}
+                />
+              </div>
+              <div className="song-item__info">
+                <h4>{props.title}</h4>
+                <h5>{props.artistName}</h5>
+              </div>
+            </Card>
+          </li>
+        );
+      }}
+    </PlayerContext.Consumer>
   );
 };
 

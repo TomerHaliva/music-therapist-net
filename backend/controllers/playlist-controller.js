@@ -1,12 +1,17 @@
 const Playlist = require("../models/playlist-schema");
-
+const Record = require("../models/record-schema");
 const HttpError = require("../models/http-error");
 
 const getPlaylistById = async (req, res, next) => {
   const playlistId = req.params.playlistId;
   let playlist;
   try {
-    playlist = await Playlist.findOne({ id: playlistId });
+    playlist = await Playlist.findOne({ id: playlistId })
+      .populate("records")
+      .exec();
+    await Record.populate(playlist, "records.comments").then(
+      (res) => (playlist = res)
+    );
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not find a playlist",
@@ -21,7 +26,7 @@ const getPlaylistById = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json({ playlist: playlist });
+  res.json({ playlist: playlist.toObject() });
 };
 
 const addPlaylist = async (req, res, next) => {

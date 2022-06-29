@@ -1,0 +1,72 @@
+const Record = require("../models/record-schema");
+const Playlist = require("../models/playlist-schema");
+
+const HttpError = require("../models/http-error");
+
+const addRecord = async (req, res, next) => {
+  const { title, artistName, videoId, playlist } = req.body;
+
+  const createdRecord = new Record({
+    title,
+    artistName,
+    videoId,
+    comments: [],
+  });
+
+  try {
+    await createdRecord.save(); // save is already Promise()
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      `Creating ${createdRecord.title} record failed.`,
+      500
+    );
+    return next(error);
+  }
+
+  try {
+    await Playlist.findOneAndUpdate(
+      { name: playlist },
+      { $push: { records: createdRecord._id } },
+      { new: true }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      `Could not add new record to ${playlist} playlist.`,
+      500
+    );
+    return next(error);
+  }
+
+  res.status(201).json({ record: createdRecord }); // Code 201 means something new created
+};
+
+const getRecord = async (req, res, next) => {
+  const recordId = req.params.recordId;
+  console.log(recordId);
+
+  let record;
+  try {
+    record = await Record.findOne({ _id: recordId }).populate("comments").exec();
+    // await Record.populate(playlist, "records.comments").then(
+    //   (res) => (playlist = res)
+    // );
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not find a playlist",
+      500 // Error code 500 means something went wrong on the server
+    );
+    return next(error);
+  }
+  if (!record) {
+    const error = new HttpError(
+      "Could not find a playlist for the provided playlist id",
+      404 // Error code 404 means something went wrong on client
+    );
+    return next(error);
+  }
+  res.json({ record: record.toObject() });
+};
+
+exports.addRecord = addRecord;
+exports.getRecord = getRecord;

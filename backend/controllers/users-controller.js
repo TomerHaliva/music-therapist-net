@@ -18,9 +18,10 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserByUid = async (req, res, next) => {
   const uid = req.params.uid;
+  console.log(uid);
   let user;
   try {
-    user = await User.findById(uid); // Because mongoose, we can use async await, in general findById does not return a Promise(). For Promise() use .exec()
+    user = await User.findOne({ uuid: uid }); // Because mongoose, we can use async await, in general findById does not return a Promise(). For Promise() use .exec()
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not find a user",
@@ -35,12 +36,14 @@ const getUserByUid = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json({ user: user.toObject() }); // Convert the mongoose user object to normal javascript object
+  res.json({ user: user }); // Convert the mongoose user object to normal javascript object
 };
 
 const createUser = async (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
   let isUserExist;
+  let uid;
+
   await auth
     .getUserByEmail(email)
     .then((user) => {
@@ -63,13 +66,14 @@ const createUser = async (req, res, next) => {
       displayName: `${firstName} ${lastName}`,
       disabled: false,
     })
-    .then(() => {
+    .then((user) => {
+      uid = user.uid;
       console.log("User added to Firebase auth");
     })
     .catch(() => console.log("User did not added to Firebase auth"));
 
   const createdUser = new User({
-    uuid: uuid(),
+    uuid: uid,
     email,
     // password,
     firstName,

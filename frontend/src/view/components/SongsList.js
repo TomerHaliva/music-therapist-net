@@ -8,10 +8,11 @@ const SongsList = (props) => {
     <ul className="songs-list">
       {props.items.map((song) => (
         <SongsItem
-          key={song.title}
-          id={song.title}
+          key={song._id}
+          id={song._id}
           videoId={song.videoId}
           title={song.title}
+          comments={song.comments}
           artistName={song.artistName}
         />
       ))}

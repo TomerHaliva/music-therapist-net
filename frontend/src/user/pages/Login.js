@@ -24,9 +24,6 @@ const Login = () => {
     signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
       .then((user) => {
         if (user) {
-          authContext.currentUser = user.user.displayName;
-          console.log(authContext.currentUser);
-          // authContext.currentUser.email = user.user.email;
           authContext.login();
         }
       })

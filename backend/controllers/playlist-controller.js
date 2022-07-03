@@ -4,6 +4,7 @@ const HttpError = require("../models/http-error");
 
 const getPlaylistById = async (req, res, next) => {
   const playlistId = req.params.playlistId;
+  console.log(playlistId);
   let playlist;
   try {
     playlist = await Playlist.findOne({ id: playlistId })

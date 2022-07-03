@@ -4,13 +4,16 @@ const Playlist = require("../models/playlist-schema");
 const HttpError = require("../models/http-error");
 
 const addRecord = async (req, res, next) => {
-  const { title, artistName, videoId, playlist } = req.body;
-
+  const { title, artistName, videoId, likes, unlikes, playlist } = req.body;
+  console.log(playlist);
   const createdRecord = new Record({
     title,
     artistName,
     videoId,
     comments: [],
+    likes: 0,
+    unlikes: 0,
+    playlist,
   });
 
   try {
@@ -26,7 +29,7 @@ const addRecord = async (req, res, next) => {
 
   try {
     await Playlist.findOneAndUpdate(
-      { name: playlist },
+      { _id: playlist },
       { $push: { records: createdRecord._id } },
       { new: true }
     );
@@ -47,7 +50,10 @@ const getRecord = async (req, res, next) => {
 
   let record;
   try {
-    record = await Record.findOne({ _id: recordId }).populate("comments").exec();
+    record = await Record.findOne({ _id: recordId })
+      .populate("comments")
+      .exec();
+    await Record.populate(record, "playlist").then((res) => (record = res));
     // await Record.populate(playlist, "records.comments").then(
     //   (res) => (playlist = res)
     // );
@@ -68,5 +74,39 @@ const getRecord = async (req, res, next) => {
   res.json({ record: record.toObject() });
 };
 
+const updateRecord = async (req, res, next) => {
+  const { likes, unlikes } = req.body;
+  console.log(likes);
+  console.log(unlikes);
+
+  const recordId = req.params.recordId;
+  let record;
+  try {
+    record = await Record.findById(recordId);
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update record.",
+      500
+    );
+    return next(error);
+  }
+
+  record.likes = likes;
+  record.unlikes = unlikes;
+
+  try {
+    await record.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update record.",
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ record: record.toObject() });
+};
+
 exports.addRecord = addRecord;
 exports.getRecord = getRecord;
+exports.updateRecord = updateRecord;

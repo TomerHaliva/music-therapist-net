@@ -6,8 +6,6 @@ const router = express.Router();
 
 // router.get("/", genresControllers.getAllGenres);
 
-// router.get("/:playlistId", playlistController.getPlaylistById);
-
 router.post("/", commentController.addComment);
 
 // router.patch("/:uid", usersControllers.updateUser);

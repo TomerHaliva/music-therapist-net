@@ -1,16 +1,16 @@
 const express = require("express");
 
-const recorController = require("../controllers/record-controller");
+const recordController = require("../controllers/record-controller");
 
 const router = express.Router();
 
 // router.get("/", genresControllers.getAllGenres);
 
-router.get("/:recordId", recorController.getRecord);
+router.get("/:recordId", recordController.getRecord);
 
-router.post("/", recorController.addRecord);
+router.post("/", recordController.addRecord);
 
-// router.patch("/:uid", usersControllers.updateUser);
+router.patch("/:recordId", recordController.updateRecord);
 
 // router.delete("/:uid", usersControllers.deleteUser);
 

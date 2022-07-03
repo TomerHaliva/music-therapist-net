@@ -1,6 +1,5 @@
 import React, { useReducer, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { auth } from "../../Firebase-config";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { PlayerContext } from "../../shared/context/player-context";
@@ -9,7 +8,6 @@ import "./AddComment.css";
 
 const AddComment = (props) => {
   const authContext = useContext(AuthContext);
-  const playerContext = useContext(PlayerContext);
 
   const [record, setRecord] = useState();
   const [currentUser, setCurrentUser] = useState();

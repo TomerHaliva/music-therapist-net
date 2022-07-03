@@ -18,7 +18,6 @@ const getAllUsers = async (req, res, next) => {
 
 const getUserByUid = async (req, res, next) => {
   const uid = req.params.uid;
-  console.log(uid);
   let user;
   try {
     user = await User.findOne({ uuid: uid }); // Because mongoose, we can use async await, in general findById does not return a Promise(). For Promise() use .exec()

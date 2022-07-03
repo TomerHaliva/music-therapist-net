@@ -18,6 +18,7 @@ import ViewScreen from "./view/pages/ViewScreen";
 import { AuthContext } from "./shared/context/auth-context";
 import Loading from "./shared/components/UIElements/Loading";
 import axios from "axios";
+import MyPlace from "./user/pages/MyPlace";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,6 +67,9 @@ const App = () => {
         </Route>
         <Route path="/home/:language/:genre" exact>
           <ViewScreen />
+        </Route>
+        <Route path="/myPlace/:uid" exact>
+          <MyPlace />
         </Route>
         <Redirect to="/home" />
         <Loading show={true} />

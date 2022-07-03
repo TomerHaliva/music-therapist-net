@@ -9,7 +9,6 @@ import "./NavLinks.css";
 
 const NavLinks = (props) => {
   const authContext = useContext(AuthContext);
-
   const logoutHandler = async (e) => {
     e.preventDefault();
     await signOut(auth)
@@ -26,16 +25,18 @@ const NavLinks = (props) => {
   return (
     <ul className="nav-links">
       <li>
-        <NavLink to="/" exact>
-          ALL USERS
+        <NavLink to={`/myPlace/${auth.currentUser.displayName}`} exact>
+          My Place
         </NavLink>
       </li>
       <li>
-        <NavLink to="/u1/places">MY PLACES</NavLink>
+        <NavLink to="/home" exact>
+          Home
+        </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink to="/places/new">ADD PLACE</NavLink>
-      </li>
+      </li> */}
       <li>
         <Link onClick={logoutHandler} to="/">
           LOGOUT

@@ -31,6 +31,15 @@
 
 .view-screen__info {
   border-bottom: 2px solid #d9d9d9;
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+.view-screen__info__likes {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
 }
 
 .view-screen__comments-container {
@@ -96,6 +105,11 @@
 }
 
 .view-screen__comments {
+  display: flex;
+  flex-direction: column;
+}
+
+.view-screen__no-songs {
   display: flex;
   flex-direction: column;
 }

@@ -2,3 +2,16 @@
   list-style-type: none;
   display: contents;
 }
+
+.song-list__content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.song-list__add {
+  font-size: 50pt;
+  border: none;
+  background: none;
+  cursor: pointer;
+}

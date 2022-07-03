@@ -8,11 +8,15 @@ import { PlayerContext } from "../../shared/context/player-context";
 import "./SongsItem.css";
 
 const SongsItem = (props) => {
+  const playerContext = useContext(PlayerContext);
+  // console.log(playerContext);
+
   const switchRecordHandler = async (obj) => {
     await axios
       .get(`http://localhost:5000/api/records/${props.id}`)
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data.record);
+        // obj.currentPlay = res.data.record;
         obj.switchRecord(res.data.record);
       });
   };

@@ -7,6 +7,7 @@ import SideDrawer from "./SideDrawer";
 import Backdrop from "../UIElements/Backdrop";
 
 import "./MainNavigation.css";
+import { auth } from "../../../Firebase-config";
 
 const MainNavigation = (props) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
@@ -38,7 +39,9 @@ const MainNavigation = (props) => {
           <span />
         </button>
         <h1 className="main-navigation__title">
-          <Link to="/home">Music Therapist Net</Link>
+          <Link
+            to={`/myPlace/${auth.currentUser.displayName}`}
+          >{`Hello, ${auth.currentUser.displayName}`}</Link>
         </h1>
         <nav className="main-navigation__header-nav">
           <NavLinks />

@@ -12,8 +12,11 @@ const Languages = () => {
 
   const getLanguage = async () => {
     await axios.get("http://localhost:5000/api/languages").then((res) => {
-      console.log(res.data.languages);
-      setLanguage(res.data.languages);
+      const languages = res.data.languages.sort((a, b) =>
+        a.name > b.name ? 1 : -1
+      );
+
+      setLanguage(languages);
     });
   };
   return <LanguagesList items={language} onAdded={getLanguage} />;

@@ -1,52 +1,40 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { initThumbBtn, increment } from "../../shared/slices/thumbsSlice";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./ThumbButton.css";
-import { PlayerContext } from "../../shared/context/player-context";
 
 const ThumbButton = (props) => {
-  const playerContext = useContext(PlayerContext);
-  console.log(playerContext);
+  const dispatch = useDispatch();
+  const playlist = useSelector((state) => state.playlist);
+  const thumbBtn = useSelector((state) => state.thumbBtn);
 
-  const [record, setRecord] = useState(playerContext.currentPlay);
+  // const [loaded, setLoaded] = useEffect(false);
 
-  const buttonReducer = (state, action) => {
-    switch (action.type) {
-      case "DECREMENT":
-        if (action.action === "like")
-          return { ...state, isActive: false, likes: state.likes - 1 };
-
-        if (action.action === "unlike")
-          return { ...state, isActive: false, unlikes: state.unlikes - 1 };
-
-      case "INCREMENT":
-        if (action.action === "like")
-          return { ...state, isActive: true, likes: state.likes + 1 };
-
-        if (action.action === "unlike")
-          return { ...state, isActive: true, unlikes: state.unlikes + 1 };
-    }
-  };
-
-  const [buttonState, buttonDispatch] = useReducer(buttonReducer, {
-    isActive: false,
-    icon: props.icon,
-    size: props.size,
-    likes: props.record.likes,
-    unlikes: props.record.unlikes,
-    action: props.action,
-    record: playerContext.currentPlay,
-  });
+  useEffect(() => {
+    dispatch(
+      initThumbBtn({
+        isActive: false,
+        record: playlist.currentPlay,
+      })
+    );
+    // setLoaded(true);
+    // console.log(playlist);
+  }, [playlist]);
 
   const thumbClickHandler = async () => {
-    console.log(buttonState.record);
-
-    buttonState.isActive
-      ? buttonDispatch({ type: "DECREMENT", action: buttonState.action })
-      : buttonDispatch({ type: "INCREMENT", action: buttonState.action });
-
-    console.log(buttonState);
+    if(props.action === "like"){
+      if(!thumbBtn.isActive)
+      dispatch(increment())
+      else dispatch()
+    }
+    // console.log(buttonState.record);
+    // buttonState.isActive
+    //   ? buttonDispatch({ type: "DECREMENT", action: buttonState.action })
+    //   : buttonDispatch({ type: "INCREMENT", action: buttonState.action });
+    // console.log(buttonState);
     // await axios
     //   .patch(
     //     `http://localhost:5000/api/records/${props.record._id}`,
@@ -56,22 +44,16 @@ const ThumbButton = (props) => {
   };
 
   return (
-    <PlayerContext.Consumer>
-      {({ currentPlay, switchRecord }) => {
-        return (
-          <span className="thumb-button">
-            <FontAwesomeIcon
-              className="thumb-button__icon"
-              onClick={thumbClickHandler}
-              icon={buttonState.icon}
-              size={buttonState.size}
-            />{" "}
-            {buttonState.action === "like" && buttonState.likes}
-            {buttonState.action === "unlike" && buttonState.unlikes}
-          </span>
-        );
-      }}
-    </PlayerContext.Consumer>
+    <span className="thumb-button">
+      <FontAwesomeIcon
+        className="thumb-button__icon"
+        onClick={thumbClickHandler}
+        icon={props.icon}
+        size={props.size}
+      />{" "}
+      {props.action === "like" && thumbBtn.record.likes}
+      {props.action === "unlike" && thumbBtn.record.unlikes}
+    </span>
   );
 };
 

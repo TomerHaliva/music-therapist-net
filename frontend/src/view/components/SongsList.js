@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import SongsItem from "./SongsItem";
 
 import "./SongsList.css";
@@ -9,13 +10,6 @@ const SongsList = (props) => {
 
   return (
     <ul className="songs-list">
-      {/* <li className="song-item">
-        <Card className="song-list__content">
-          <button className="song-list__add" onClick={addRecordHandler}>
-            +
-          </button>
-        </Card>
-      </li> */}
       <AddRecordItem playlist={props.playlistDetails} onAdded={props.onAdded} />
       {props.items.map((song) => (
         <SongsItem
@@ -27,7 +21,6 @@ const SongsList = (props) => {
           artistName={song.artistName}
         />
       ))}
-      {/* <AddLanguagesItem id="ADD" name="Add Language" onClose={props.onAdded} /> */}
     </ul>
   );
 };

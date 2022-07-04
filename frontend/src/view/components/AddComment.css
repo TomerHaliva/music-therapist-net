@@ -37,15 +37,24 @@
   display: flex;
   flex-direction: row-reverse;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .add-comment__buttons span {
   background-color: none;
-  border-bottom: 1.5px solid;
-  font-size: 15pt;
+  /* border-bottom: 1.5px solid; */
+  font-size: 16pt;
+  padding: 0.75rem;
 }
 
 .add-comment__buttons span:hover {
-  color: red;
+  /* color: red; */
+  /* background-color: rgba(3, 3, 3, 0.502); */
   cursor: pointer;
+}
+
+#submit-comment {
+  background-color: #008cba;
+  border-radius: 0.25rem;
+  color: white;
 }

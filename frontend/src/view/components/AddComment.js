@@ -1,6 +1,7 @@
-import React, { useReducer, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-
+import { setCurrentPlayer } from "../../shared/slices/playlistSlice";
 import { AuthContext } from "../../shared/context/auth-context";
 import { PlayerContext } from "../../shared/context/player-context";
 
@@ -8,6 +9,9 @@ import "./AddComment.css";
 
 const AddComment = (props) => {
   const authContext = useContext(AuthContext);
+
+  const dispatch = useDispatch();
+  const playlist = useSelector((state) => state.playlist);
 
   const [record, setRecord] = useState();
   const [currentUser, setCurrentUser] = useState();
@@ -42,9 +46,12 @@ const AddComment = (props) => {
     await axios
       .post("http://localhost:5000/api/comments", newComment)
       .then((res) => {
+        console.log(res.data);
         setCommentValue("");
         setShowCommentBtns(false);
-        obj.switchRecord({ ...obj.currentPlay, comments: res.data.comment });
+        // playlist.currentPlay.comments = res.da
+        // obj.switchRecord({ ...obj.currentPlay, comments: res.data.comment });
+        dispatch(setCurrentPlayer({ comment: res.data }));
       });
   };
 
@@ -67,6 +74,7 @@ const AddComment = (props) => {
               {showCommentBtns && (
                 <div className="add-comment__buttons">
                   <span
+                    id="submit-comment"
                     onClick={() =>
                       addCommentHandler({ currentPlay, switchRecord })
                     }

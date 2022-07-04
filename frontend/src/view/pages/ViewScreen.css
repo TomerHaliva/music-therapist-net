@@ -113,3 +113,8 @@
   display: flex;
   flex-direction: column;
 }
+
+.add-record {
+  width: 200px;
+  margin: 0 auto;
+}

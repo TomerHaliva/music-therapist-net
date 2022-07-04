@@ -1,8 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-
 import Card from "../../shared/components/UIElements/Card";
-import Avatar from "../../shared/components/UIElements/Avatar";
 
 import "./GenresItem.css";
 

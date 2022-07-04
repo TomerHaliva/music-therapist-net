@@ -1,10 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-  setPersistence,
-  browserSessionPersistence,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import "./Login.css";
 import { auth } from "../../Firebase-config";
@@ -20,7 +16,6 @@ const Login = () => {
       password: event.target[1].value,
     };
 
-    // setPersistence(auth, browserSessionPersistence).then(() => {
     signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
       .then((user) => {
         if (user) {

@@ -1,16 +1,16 @@
 import React from "react";
 
 import GenresItem from "./GenresItem";
-import Card from "../../shared/components/UIElements/Card";
-import "./GenresList.css";
 import AddGenreItem from "./AddGenreItem";
 import Loading from "../../shared/components/UIElements/Loading";
+
+import "./GenresList.css";
 
 const GenresList = (props) => {
   if (props.items.length === 0) {
     return <Loading />;
   }
- 
+
   return (
     <ul className="genre-list">
       {props.items.map((genre) => (

@@ -1,19 +1,15 @@
-import React, { useState, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import React, { useState, useReducer, useEffect } from "react";
 import YouTube from "react-youtube";
-import Card from "../../shared/components/UIElements/Card";
+
 import Modal from "../../shared/components/UIElements/Modal";
+import { PlayerContext } from "../../shared/context/player-context";
 
-import "./AddRecordItem.css";
-import { initPlaylist } from "../../shared/slices/playlistSlice";
+import "./AddRecord.css";
 
-const AddRecordItem = (props) => {
-  console.log(props);
-
-  const dispatch = useDispatch();
-  const playlist = useSelector((state) => state.playlist);
-  const [showAdd, setShowAdd] = useState(false);
+const AddRecord = (props) => {
+  console.log(props.playlist);
+  // useEffect(() => {}, [props]);
 
   const formReducer = (state, action) => {
     switch (action.type) {
@@ -53,6 +49,7 @@ const AddRecordItem = (props) => {
     comments: [],
   });
 
+
   const addSongForm = (
     <div className="add-record-form">
       <label>Enter Record Title</label>
@@ -77,6 +74,7 @@ const AddRecordItem = (props) => {
       <label>Paste YouTube Link</label>
       <input
         onChange={(e) =>
+          // formDispatch({ type: "LINK_VALID", videoLink: e.target.value })
           !formState.isVideoLinkValid
             ? formDispatch({
                 type: "LINK_SPLIT",
@@ -103,8 +101,9 @@ const AddRecordItem = (props) => {
     </div>
   );
 
-  const submitFormHandler = async (event, switchRecord) => {
+  const submitFormHandler = async (event, obj) => {
     event.preventDefault();
+    //add record to playlist
     const record = {
       title: formState.title,
       artistName: formState.artistName,
@@ -118,58 +117,23 @@ const AddRecordItem = (props) => {
       .then(async (res) => {
         console.log(res);
         await axios
-          .get(`http://localhost:5000/api/playlists/${playlist.name}`)
+          .get(`http://localhost:5000/api/playlists/${props.playlist.id}`)
           .then((res) => {
             console.log(res);
-            setShowAdd(false);
-            dispatch(
-              initPlaylist({
-                ...res.data.playlist,
-                currentPlay: res.data.playlist.records[0],
-              })
-            );
-
-            setShowAdd(false);
+            // setShowAdd(false);
+            obj.switchRecord(res.data.playlist.records[0]);
+            props.onAdded();
           });
       });
   };
 
-  const openAddHandler = () => setShowAdd(true);
-  const closeAddHandler = () => setShowAdd(false);
-
   return (
-    <React.Fragment>
-      <Modal
-        show={showAdd}
-        onCancel={closeAddHandler}
-        footer={
-          <React.Fragment>
-            <button id="cancel" onClick={closeAddHandler}>
-              CANCEL
-            </button>
-            <button
-              id="submit"
-              type="submit"
-              onClick={(e) => submitFormHandler(e)}
-            >
-              SUBMIT
-            </button>
-          </React.Fragment>
-        }
-        footerClass="add-language"
-      >
-        <div className="addLanguage-container">
-          <h2>Add a new record</h2>
-          {addSongForm}
-        </div>
-      </Modal>
-      <li className={`song-item ${props.addClass ?? ''}`} onClick={openAddHandler}>
-        <Card className="song-item__add-content">
-          <button className="song-list__add">+</button>
-        </Card>
-      </li>
-    </React.Fragment>
+    <PlayerContext.Consumer>
+      {({ currentPlay, switchRecord }) => {
+        return <React.Fragment>{addSongForm}</React.Fragment>;
+      }}
+    </PlayerContext.Consumer>
   );
 };
 
-export default AddRecordItem;
+export default AddRecord;
